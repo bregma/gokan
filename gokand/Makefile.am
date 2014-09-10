@@ -18,6 +18,7 @@ bin_PROGRAMS = gokand
 
 gokand_SOURCES = \
   configuration.h  configuration.cpp \
+  controller.h     controller.cpp \
   main.cpp
 
 gokand_CPPFLAGS = \

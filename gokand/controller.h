@@ -1,6 +1,6 @@
 /**
- * @file gokand/main.cpp
- * @brief gokan service daemon program entry point.
+ * @file gokand/controller.h
+ * @brief gokand controller interface
  */
 
 /*
@@ -18,32 +18,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "gokand/configuration.h"
-#include "gokand/controller.h"
-#include <iostream>
+#ifndef GOKAND_CONTROLLER_H
+#define GOKAND_CONTROLLER_H 1
 
-using namespace Gokand;
+#include <memory>
 
 
-int
-main(int argc, char* argv[])
+namespace Gokand
 {
-  try
-  {
-    Configuration config(argc, argv);
-    Controller    controller(&config);
-  }
-  catch (std::exception const& ex)
-  {
-    std::cerr << "exception caught: " << ex.what() << "\n"
-              << "exiting...\n";
-    return 1;
-  }
-  catch (...)
-  {
-    std::cerr << "unknown exception caught, "
-              << "exiting...\n";
-    return 1;
-  }
-  return 0;
-}
+class Configuration;
+
+/**
+ * A master controller for aggregating the various components of the Gokan
+ * service.
+ */
+class Controller
+{
+public:
+  Controller(Configuration* configuration);
+  ~Controller() ;
+
+private:
+  struct Impl;
+  std::unique_ptr<Impl> impl_;
+};
+
+} // namespace Gokand
+
+#endif /* GOKAND_CONTROLLER_H */
