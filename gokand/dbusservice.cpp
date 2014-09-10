@@ -78,7 +78,123 @@ struct DbusService::Impl
       g_dbus_method_invocation_return_error(invocation,
                                             impl->error_quark_,
                                             0,
-                                            "error starting application: %s",
+                                            "error getting device by type: %s",
+                                            ex.what());
+    }
+    return TRUE;
+  }
+
+
+  static gboolean
+  on_handle_sensors_start_watch_by_type(GokanFinder*           interface,
+                                        GDBusMethodInvocation* invocation,
+                                        const gchar*           type_name,
+                                        gpointer               user_data)
+  {
+    Impl* impl = static_cast<Impl*>(user_data);
+    if (impl->configuration_->is_verbose_mode())
+    {
+      g_print("%s(%s)\n", __PRETTY_FUNCTION__, type_name);
+    }
+
+    try
+    {
+      /** @todo implement me */
+      gokan_finder_complete_sensors_start_watch_by_type(interface, invocation);
+    }
+    catch (std::exception& ex)
+    {
+      g_dbus_method_invocation_return_error(invocation,
+                                            impl->error_quark_,
+                                            0,
+                                            "error starting watch by type: %s",
+                                            ex.what());
+    }
+    return TRUE;
+  }
+
+
+  static gboolean
+  on_handle_sensors_stop_watch_by_type(GokanFinder*           interface,
+                                       GDBusMethodInvocation* invocation,
+                                       const gchar*           type_name,
+                                       gpointer               user_data)
+  {
+    Impl* impl = static_cast<Impl*>(user_data);
+    if (impl->configuration_->is_verbose_mode())
+    {
+      g_print("%s(%s)\n", __PRETTY_FUNCTION__, type_name);
+    }
+
+    try
+    {
+      /** @todo implement me */
+      gokan_finder_complete_sensors_stop_watch_by_type(interface, invocation);
+    }
+    catch (std::exception& ex)
+    {
+      g_dbus_method_invocation_return_error(invocation,
+                                            impl->error_quark_,
+                                            0,
+                                            "error stopping watch by type: %s",
+                                            ex.what());
+    }
+    return TRUE;
+  }
+
+
+  static gboolean
+  on_handle_start_read(GokanDevice*           interface,
+                       GDBusMethodInvocation* invocation,
+                       gint                   sensor_id,
+                       gpointer               user_data)
+  {
+    Impl* impl = static_cast<Impl*>(user_data);
+    if (impl->configuration_->is_verbose_mode())
+    {
+      g_print("%s(%d)\n", __PRETTY_FUNCTION__, sensor_id);
+    }
+
+    try
+    {
+      /** @todo implement me */
+      gokan_device_complete_start_read(interface, invocation);
+    }
+    catch (std::exception& ex)
+    {
+      g_dbus_method_invocation_return_error(invocation,
+                                            impl->error_quark_,
+                                            0,
+                                            "error starting read: %s",
+                                            ex.what());
+    }
+    return TRUE;
+  }
+
+
+  static gboolean
+  on_handle_stop_read(GokanDevice*           interface,
+                       GDBusMethodInvocation* invocation,
+                       gint                   sensor_id,
+                       gpointer               user_data)
+  {
+    Impl* impl = static_cast<Impl*>(user_data);
+    if (impl->configuration_->is_verbose_mode())
+    {
+      g_print("%s(%d)\n", __PRETTY_FUNCTION__, sensor_id);
+    }
+
+    try
+    {
+      /** @todo implement me */
+      gokan_device_complete_stop_read(interface, invocation);
+    }
+    catch (std::exception& ex)
+    {
+      g_dbus_method_invocation_return_error(invocation,
+                                            impl->error_quark_,
+                                            0,
+                                            "error stopping read: %s",
                                             ex.what());
     }
     return TRUE;
@@ -101,6 +217,14 @@ struct DbusService::Impl
                      "handle-sensors-get-by-type",
                      G_CALLBACK (on_handle_sensors_get_by_type),
                      user_data);
+    g_signal_connect(finder_interface,
+                     "handle-sensors-start-watch-by-type",
+                     G_CALLBACK (on_handle_sensors_start_watch_by_type),
+                     user_data);
+    g_signal_connect(finder_interface,
+                     "handle-sensors-stop-watch-by-type",
+                     G_CALLBACK (on_handle_sensors_stop_watch_by_type),
+                     user_data);
 
     gboolean bstat = g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(finder_interface),
                                                       connection,
@@ -109,6 +233,25 @@ struct DbusService::Impl
     if (!bstat)
     {
       g_print("error exporting Finder D-Bus interface: %s", error->message);
+      g_error_free(error);
+    }
+
+    GokanDevice* device_interface = gokan_device_skeleton_new();
+    g_signal_connect(device_interface,
+                     "handle-start-read",
+                     G_CALLBACK (on_handle_start_read),
+                     user_data);
+    g_signal_connect(device_interface,
+                     "handle-stop-read",
+                     G_CALLBACK (on_handle_stop_read),
+                     user_data);
+    bstat = g_dbus_interface_skeleton_export(G_DBUS_INTERFACE_SKELETON(device_interface),
+                                             connection,
+                                             "/com/canonical/Gokan/Device",
+                                             &error);
+    if (!bstat)
+    {
+      g_print("error exporting Device D-Bus interface: %s", error->message);
       g_error_free(error);
     }
   }
