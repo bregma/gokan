@@ -14,4 +14,15 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+bin_PROGRAMS = gokand
+
+gokand_SOURCES = \
+  main.cpp
+
+gokand_CPPFLAGS = \
+  -I$(top_srcdir) \
+  $(GIO_CFLAGS)
+
+gokand_LDADD = \
+  $(GIO_LIBS)
 

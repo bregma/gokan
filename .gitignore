@@ -17,6 +17,7 @@ config.*
 configure
 dbusinterface.[ch]
 depcomp
+gokand
 install-sh
 libgeis.pc
 libtool
