@@ -1,0 +1,47 @@
+<!DOCTYPE node PUBLIC
+  "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+  "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node name="/ca/bregmasoft/gokan">
+  <interface name="ca.bregmasoft.Gokan.Finder">
+    <method name="SensorsGetByType">
+      <arg direction="in"  type="s"     name="type_name"/>
+      <arg direction="out" type="a(is)" name="matching_sensors"/>
+    </method>
+    <method name="SensorsStartWatchByType">
+      <arg direction="in"  type="s"  name="type_name"/>
+    </method>
+    <method name="SensorsStopWatchByType">
+      <arg direction="in"  type="s"  name="type_name"/>
+    </method>
+    <signal name="SensorAdded">
+      <arg type="i" name="sensor_id"/>
+      <arg type="s" name="sensor_name"/>
+    </signal>
+    <signal name="SensorRemoved">
+      <arg type="i" name="sensor_id"/>
+      <arg type="s" name="sensor_name"/>
+    </signal>
+  </interface>
+
+  <interface name="ca.bregmasoft.Gokan.Device">
+    <method name="GetProperty">
+      <arg direction="in"  type="i"     name="sensor_id"/>
+      <arg direction="in"  type="as"    name="property_names"/>
+      <arg direction="out" type="a{sv}" name="property_values"/>
+    </method>
+    <method name="SetProperty">
+      <arg direction="in"  type="i"     name="sensor_id"/>
+      <arg direction="in"  type="a{sv}" name="property_values"/>
+    </method>
+    <method name="StartRead">
+      <arg direction="in"  type="i"  name="sensor_id"/>
+    </method>
+    <signal name="Data">
+      <arg type="i"     name="sensor_id"/>
+      <arg type="a{sv}" name="sensor_data"/>
+    </signal>
+    <method name="StopRead">
+      <arg direction="in"  type="i"  name="sensor_id"/>
+    </method>
+  </interface>
+</node>
