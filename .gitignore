@@ -1,12 +1,11 @@
-**.la
-**.lo
-**.pdf
-**/Makefile
 *.deps
+*.la
 *.libs
+*.lo
 *.log
 *.o
-*Makefile.in
+*.pdf
+.*.swp
 aclocal.m4
 autom4te.cache
 check-*-compile
@@ -17,7 +16,7 @@ config.*
 configure
 dbusinterface.[ch]
 depcomp
-gokand
+gokand/gokand
 install-sh
 libgeis.pc
 libtool
@@ -26,6 +25,8 @@ ltmain.sh
 ltoptions.m4
 ltversion.m4
 lt~obsolete.m4
+Makefile
+Makefile.in
 missing
 pkg.m4
 stamp-*

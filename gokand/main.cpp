@@ -18,7 +18,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+#include "gokand/configuration.h"
 #include <iostream>
+
+using namespace Gokand;
 
 
 int
@@ -26,6 +29,7 @@ main(int argc, char* argv[])
 {
   try
   {
+    Configuration confg(argc, argv);
   }
   catch (std::exception const& ex)
   {
