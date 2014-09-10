@@ -19,6 +19,7 @@ bin_PROGRAMS = gokand
 gokand_SOURCES = \
   configuration.h  configuration.cpp \
   controller.h     controller.cpp \
+  dbusservice.h    dbusservice.cpp \
   main.cpp
 
 gokand_CPPFLAGS = \
@@ -26,5 +27,6 @@ gokand_CPPFLAGS = \
   $(GIO_CFLAGS)
 
 gokand_LDADD = \
+  $(top_builddir)/libgokan/libgokan.la \
   $(GIO_LIBS)
 
