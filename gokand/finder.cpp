@@ -20,6 +20,9 @@
  */
 #include "gokand/finder.h"
 
+#include <algorithm>
+#include "gokand/sensorimpliio.h"
+
 
 namespace Gokand
 {
@@ -27,12 +30,19 @@ namespace Gokand
 
 struct Finder::Impl
 {
-  Impl(Configuration* configuration)
-  : configuration_(configuration)
-  { }
+  Impl(Configuration* configuration);
 
   Configuration* configuration_;
+  Sensor::Bag    sensors_;
 };
+
+
+Finder::Impl::
+Impl(Configuration* configuration)
+: configuration_(configuration)
+{
+  autodetect_iio_devices(sensors_);
+}
 
 
 Finder::
@@ -50,6 +60,9 @@ Sensor::Bag Finder::
 sensors_get_by_type(Sensor::Type const& sensor_type)
 {
   Sensor::Bag sensor_bag;
+  std::copy_if(std::begin(impl_->sensors_), std::end(impl_->sensors_),
+               std::back_inserter(sensor_bag),
+               [sensor_type](Sensor::Ptr const& s) { return sensor_type == "all" || sensor_type == s->type(); });
   return sensor_bag;
 }
 

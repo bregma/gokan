@@ -26,7 +26,8 @@ libgokand_a_SOURCES = \
   dbusservice.h    dbusservice.cpp \
   finder.h         finder.cpp \
   sensor.h         sensor.cpp \
-  sensorimpl.h     sensorimpl.cpp
+  sensorimpl.h     sensorimpl.cpp \
+  sensorimpliio.h  sensorimpliio.cpp
 
 libgokand_a_CPPFLAGS = \
   -I$(top_srcdir) \
@@ -34,10 +35,12 @@ libgokand_a_CPPFLAGS = \
 
 gokand_CPPFLAGS = \
   -I$(top_srcdir) \
-  $(GIO_CFLAGS)
+  $(GIO_CFLAGS) \
+  $(UDEV_CFLAGS)
 
 gokand_LDADD = \
   $(top_builddir)/gokand/libgokand.a \
   $(top_builddir)/libgokan/libgokan.la \
-  $(GIO_LIBS)
+  $(GIO_LIBS) \
+  $(UDEV_LIBS)
 
