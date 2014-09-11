@@ -18,7 +18,7 @@ dbusinterface.[ch]
 depcomp
 gokand/gokand
 install-sh
-libgeis.pc
+libgokand.a
 libtool
 libtool.m4
 ltmain.sh
