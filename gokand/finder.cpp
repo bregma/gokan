@@ -1,6 +1,6 @@
 /**
- * @file gokand/controller.h
- * @brief gokand controller interface
+ * @file gokand/finder.cpp
+ * @brief gokand sensor device finder
  */
 
 /*
@@ -18,36 +18,41 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef GOKAND_CONTROLLER_H
-#define GOKAND_CONTROLLER_H 1
-
-#include "gokand/sensor.h"
-#include <memory>
+#include "gokand/finder.h"
 
 
 namespace Gokand
 {
-class Configuration;
 
-/**
- * A master controller for aggregating the various components of the Gokan
- * service.
- */
-class Controller
+
+struct Finder::Impl
 {
-public:
-  Controller(Configuration* configuration);
-  ~Controller() ;
+  Impl(Configuration* configuration)
+  : configuration_(configuration)
+  { }
 
-  /** Selects zero or more sensor devices by type. */
-  Sensor::Bag
-  sensors_get_by_type(Sensor::Type const& sensor_type);
-
-private:
-  struct Impl;
-  std::unique_ptr<Impl> impl_;
+  Configuration* configuration_;
 };
+
+
+Finder::
+Finder(Configuration* configuration)
+: impl_(new Impl(configuration))
+{ }
+
+
+Finder::
+~Finder()
+{ }
+
+
+Sensor::Bag Finder::
+sensors_get_by_type(Sensor::Type const& sensor_type)
+{
+  Sensor::Bag sensor_bag;
+  return sensor_bag;
+}
+
 
 } // namespace Gokand
 
-#endif /* GOKAND_CONTROLLER_H */

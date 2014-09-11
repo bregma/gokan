@@ -24,6 +24,7 @@
 #include <gio/gio.h>
 #include "gokand/configuration.h"
 #include "gokand/controller.h"
+#include "gokand/sensor.h"
 #include "libgokan/dbusinterface.h"
 
 
@@ -69,8 +70,14 @@ struct DbusService::Impl
 
     try
     {
-      /** @todo implement me */
-      GVariant* matching_sensors = g_variant_new("a(is)", 0, "none");
+      GVariantBuilder* builder = g_variant_builder_new(G_VARIANT_TYPE("a(is)"));
+      for (auto const& sensor: impl->controller_->sensors_get_by_type(type_name))
+      {
+        g_variant_builder_add(builder, "(is)", sensor->id(), sensor->type().c_str());
+      }
+      GVariant* matching_sensors = g_variant_new("a(is)", builder);
+      g_variant_builder_unref(builder);
+
       gokan_finder_complete_sensors_get_by_type(interface, invocation, matching_sensors);
     }
     catch (std::exception& ex)

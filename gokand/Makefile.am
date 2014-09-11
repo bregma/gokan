@@ -20,6 +20,9 @@ gokand_SOURCES = \
   configuration.h  configuration.cpp \
   controller.h     controller.cpp \
   dbusservice.h    dbusservice.cpp \
+  finder.h         finder.cpp \
+  sensor.h         sensor.cpp \
+  sensorimpl.h     sensorimpl.cpp \
   main.cpp
 
 gokand_CPPFLAGS = \

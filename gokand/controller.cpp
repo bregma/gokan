@@ -21,6 +21,8 @@
  */
 #include "gokand/controller.h"
 
+#include "gokand/finder.h"
+
 
 namespace Gokand
 {
@@ -29,10 +31,11 @@ struct Controller::Impl
 {
   Impl(Configuration* configuration)
   : configuration_(configuration)
+  , finder_(configuration_)
   { }
 
-private:
   Configuration*         configuration_;
+  Finder                 finder_;
 };
 
 
@@ -45,6 +48,13 @@ Controller(Configuration* configuration)
 Controller::
 ~Controller()
 { }
+
+
+Sensor::Bag Controller::
+sensors_get_by_type(Sensor::Type const& sensor_type)
+{
+  return impl_->finder_.sensors_get_by_type(sensor_type);
+}
 
 
 } // namespace Gokand
