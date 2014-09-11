@@ -15,7 +15,7 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 check_LIBRARIES = libgmock.a
-check_PROGRAMS = gmock_gokand
+check_PROGRAMS = gtest_gokand
 TESTS = $(check_PROGRAMS)
 
 nodist_libgmock_a_SOURCES = \
@@ -27,17 +27,19 @@ libgmock_a_CPPFLAGS = \
   $(GMOCK_CPPFLAGS) \
   $(GTEST_CPPFLAGS)
 
-nodist_gmock_gokand_SOURCES = \
+nodist_gtest_gokand_SOURCES = \
   $(GMOCK_PREFIX)/src/gmock_main.cc
 
-gmock_gokand_SOURCES = 
+gtest_gokand_SOURCES = \
+  gtest_gokand_create_sensor.cpp
 
-gmock_gokand_CPPFLAGS = \
+gtest_gokand_CPPFLAGS = \
   -I$(top_srcdir) \
   $(GMOCK_CPPFLAGS) \
   $(GTEST_CPPFLAGS)
 
-gmock_gokand_LDADD = \
+gtest_gokand_LDADD = \
+  $(top_builddir)/gokand/libgokand.a \
   $(top_builddir)/libgokan/libgokan.la \
   libgmock.a \
   -lpthread

@@ -60,8 +60,13 @@ public:
    */
   typedef std::vector<Sensor::Ptr> Bag;
 
+  /**
+   * An owning smart pointer to an internal sensor implementation.
+   */
+  typedef std::unique_ptr<SensorImpl> ImplPtr;
+
 public:
-  Sensor(Id id, std::unique_ptr<SensorImpl> impl);
+  Sensor(Id id, ImplPtr impl);
   virtual ~Sensor();
 
   /**
@@ -104,8 +109,8 @@ public:
   operator<<(std::ostream&, Ptr const&);
 
 private:
-  Id                          id_;
-  std::unique_ptr<SensorImpl> impl_;
+  Id      id_;
+  ImplPtr impl_;
 };
 
 
@@ -114,6 +119,15 @@ private:
  */
 std::ostream&
 operator<<(std::ostream&, Sensor::Ptr const&);
+
+/**
+ * Handy creation function for sensor devices.
+ *
+ * @param[in] impl The sensor implementation.  The sensor will take ownership of
+ *                 the object.
+ */
+Sensor::Ptr
+create_sensor_with_impl(SensorImpl* impl);
 
 } // namspace Gokand
 

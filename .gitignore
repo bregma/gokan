@@ -17,8 +17,8 @@ config.*
 configure
 dbusinterface.[ch]
 depcomp
-gmock_gokand
 gokand/gokand
+gtest_gokand
 install-sh
 libgmock.a
 libgokand.a

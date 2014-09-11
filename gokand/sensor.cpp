@@ -86,5 +86,13 @@ operator<<(std::ostream& ostr, Sensor::Ptr const& sensor_device)
 }
 
 
+Sensor::Ptr
+create_sensor_with_impl(SensorImpl* impl)
+{
+  static Sensor::Id next_device_id = 100;
+  return std::make_shared<Sensor>(next_device_id++, Sensor::ImplPtr(impl));
+}
+
+
 } // namspace Gokand
 

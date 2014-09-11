@@ -15,21 +15,29 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 bin_PROGRAMS = gokand
+noinst_LIBRARIES = libgokand.a
 
 gokand_SOURCES = \
+  main.cpp
+
+libgokand_a_SOURCES = \
   configuration.h  configuration.cpp \
   controller.h     controller.cpp \
   dbusservice.h    dbusservice.cpp \
   finder.h         finder.cpp \
   sensor.h         sensor.cpp \
-  sensorimpl.h     sensorimpl.cpp \
-  main.cpp
+  sensorimpl.h     sensorimpl.cpp
+
+libgokand_a_CPPFLAGS = \
+  -I$(top_srcdir) \
+  $(GIO_CFLAGS)
 
 gokand_CPPFLAGS = \
   -I$(top_srcdir) \
   $(GIO_CFLAGS)
 
 gokand_LDADD = \
+  $(top_builddir)/gokand/libgokand.a \
   $(top_builddir)/libgokan/libgokan.la \
   $(GIO_LIBS)
 
