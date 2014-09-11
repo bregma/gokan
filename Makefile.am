@@ -15,6 +15,7 @@
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AM_MAKEFLAGS = --no-print-directory
+ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = libgokan gokand test tools
 EXTRA_DIST = autogen.sh

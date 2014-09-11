@@ -19,18 +19,21 @@ AC_INIT([Gokan],
         [1.0.0],
         [stephen.webb@canonical.com],
         [gokan])
+AC_CONFIG_AUX_DIR([config-aux])
+AC_CONFIG_MACRO_DIR([m4])
+
 AM_INIT_AUTOMAKE([1.13 foreign dist-xz])
 AM_SILENT_RULES([yes])
 
 AC_PROG_CC_C_O
 AC_PROG_CXX
-AC_PROG_RANLIB
 
 LT_PREREQ([2.2.6b])
 LT_INIT
 
 PKG_CHECK_MODULES([GIO],  [gio-unix-2.0])
 PKG_CHECK_MODULES([UDEV], [libudev])
+CHECK_GTEST
 
 AC_SUBST(AM_CXXFLAGS, "-Wall -Wextra -pedantic -std=c++11")
 
