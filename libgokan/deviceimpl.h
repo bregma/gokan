@@ -35,7 +35,7 @@ struct Device::Impl
 public:
   Impl(Device::Id id, Device::Type const& type);
 
-  virtual ~Impl() = 0;
+  ~Impl();
 
   /** Gets the sensor's unique identifier.  */
   Device::Id
@@ -44,14 +44,6 @@ public:
   /** Gets the autodetected type of the sensor.  */
   Device::Type
   type() const;
-
-  /** Prepares the sensor device for reporting data.  */
-  virtual int
-  open() = 0;
-
-  /** Stops the reporting of data from te device.  */
-  virtual void
-  close() = 0;
 
 private:
   Device::Id   id_;

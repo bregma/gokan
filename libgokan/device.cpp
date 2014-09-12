@@ -19,6 +19,8 @@
  */
 #include "libgokan/device.h"
 
+#include <iostream>
+#include "libgokan/dbusinterface.h"
 #include "libgokan/deviceimpl.h"
 
 
@@ -49,18 +51,104 @@ type() const
 
 int Device::
 open()
-{ return impl_->open(); }
+{
+  GokanDevice* device = gokan_device_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
+                                                            G_DBUS_PROXY_FLAGS_NONE,
+                                                            "com.canonical.Gokan",
+                                                            "/com/canonical/Gokan/Device",
+                                                            nullptr,
+                                                            nullptr);
+  if (device)
+  {
+    if (gokan_device_call_start_read_sync(device, impl_->id(), nullptr, nullptr))
+    {
+      // do something here
+    }
+    else
+    {
+      std::cerr << "error starting read\n";
+    }
+    g_clear_object(&device);
+  }
+  else
+  {
+    std::cerr << "error getting finder\n";
+  }
+  return 0;
+}
 
 
 void Device::
 close()
-{ return impl_->close(); }
+{
+  GokanDevice* device = gokan_device_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
+                                                            G_DBUS_PROXY_FLAGS_NONE,
+                                                            "com.canonical.Gokan",
+                                                            "/com/canonical/Gokan/Device",
+                                                            nullptr,
+                                                            nullptr);
+  if (device)
+  {
+    if (gokan_device_call_stop_read_sync(device, impl_->id(), nullptr, nullptr))
+    {
+      // do something here
+    }
+    else
+    {
+      std::cerr << "error stopping read\n";
+    }
+    g_clear_object(&device);
+  }
+  else
+  {
+    std::cerr << "error getting finder\n";
+  }
+}
 
 
 Device::Bag
 get_devices_by_type(Device::Type const& type)
 {
   Device::Bag devices;
+  GokanFinder* finder = gokan_finder_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
+                                                            G_DBUS_PROXY_FLAGS_NONE,
+                                                            "com.canonical.Gokan",
+                                                            "/com/canonical/Gokan/Finder",
+                                                            nullptr,
+                                                            nullptr);
+  if (finder)
+  {
+    GVariant* sensors = nullptr;
+    if (gokan_finder_call_sensors_get_by_type_sync(finder,
+                                                   type.c_str(),
+                                                   &sensors,
+                                                   nullptr,
+                                                   nullptr))
+    {
+      gsize count = g_variant_n_children(sensors);
+      for (gsize i = 0; i < count; ++i)
+      {
+        GVariant* variant = g_variant_get_child_value(sensors, i);
+        GVariant* vid = g_variant_get_child_value(variant, 0);
+        GVariant* vname = g_variant_get_child_value(variant, 1);
+        gint id = g_variant_get_int32(vid);
+        const gchar* name = g_variant_get_string(vname, nullptr);
+        /* build the Device here */
+        devices.push_back(std::make_shared<Device>(new Device::Impl(id, name)));
+      }
+      g_variant_unref(sensors);
+    }
+    else
+    {
+      std::cerr << "error getting sensors\n";
+    }
+    g_clear_object(&finder);
+  }
+  else
+  {
+    std::cerr << "error getting finder\n";
+  }
+
   return devices;
 }
 
