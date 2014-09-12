@@ -19,49 +19,18 @@
  */
 
 #include <iostream>
-#include "libgokan/dbusinterface.h"
+#include "libgokan/device.h"
+
+using namespace Gokan;
 
 
 int
 main()
 {
-  GokanFinder* finder = gokan_finder_proxy_new_for_bus_sync(G_BUS_TYPE_SESSION,
-                                                            G_DBUS_PROXY_FLAGS_NONE,
-                                                            "com.canonical.Gokan",
-                                                            "/com/canonical/Gokan/Finder",
-                                                            nullptr,
-                                                            nullptr);
-  if (!finder)
+  Device::Bag devices = get_devices_by_type("all");
+  for (auto const& device: devices)
   {
-    std::cerr << "error getting finder\n";
-    return 1;
+    std::cout << device->id() << ": " << device->type() << "\n";
   }
-
-  GVariant* sensors = nullptr;
-  gboolean bstat = gokan_finder_call_sensors_get_by_type_sync(finder,
-                                                              "all",
-                                                              &sensors,
-                                                              nullptr,
-                                                              nullptr);
-  if (!bstat)
-  {
-    std::cerr << "error getting sensors\n";
-    return 1;
-  }
-
-  gsize count = g_variant_n_children(sensors);
-  std::cout << count << " sensor devices found\n";
-  for (gsize i = 0; i < count; ++i)
-  {
-    GVariant* variant = g_variant_get_child_value(sensors, i);
-    GVariant* vid = g_variant_get_child_value(variant, 0);
-    GVariant* vname = g_variant_get_child_value(variant, 1);
-    gint id = g_variant_get_int32(vid);
-    const gchar* name = g_variant_get_string(vname, nullptr);
-    std::cout << " " << id << " " << name << "\n";
-  }
-
-  g_variant_unref(sensors);
-  g_clear_object(&finder);
 }
 
