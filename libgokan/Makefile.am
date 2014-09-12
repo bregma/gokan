@@ -21,7 +21,9 @@ generated_dbus_sources = \
 
 libgokan_la_SOURCES = \
   libgokan_config.h \
-  dbusinterface.h          dbusinterface.c
+  dbusinterface.h          dbusinterface.c \
+  device.h                 device.cpp \
+  deviceimpl.h             deviceimpl.cpp
 
 libgokan_la_CPPFLAGS = \
   -DLIBLIBGOKAN_BUILDING_DSO=1 \
