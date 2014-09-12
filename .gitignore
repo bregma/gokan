@@ -36,3 +36,4 @@ pkg.m4
 stamp-*
 TAGS
 test-driver
+tools/gokan-ls

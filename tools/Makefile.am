@@ -14,10 +14,24 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <http://www.gnu.org/licenses/>.
 
+bin_PROGRAMS = \
+  gokan-ls
+
 tool_cppflags = \
   -I${top_srcdir}
 
 tool_ldadd = \
   ${top_builddir}/libgokan/libgokan.la
+
+gokan_ls_SOURCES = \
+  gokan-ls.cpp
+
+gokan_ls_CPPFLAGS = \
+  $(tool_cppflags) \
+  $(GIO_CFLAGS)
+
+gokan_ls_LDADD = \
+  $(tool_ldadd) \
+  $(GIO_LIBS)
 
 
